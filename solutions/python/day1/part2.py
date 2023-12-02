@@ -1,7 +1,7 @@
 from itertools import product
 
-WORD_TOKENS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-DIGIT_TOKENS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+WORD_TOKENS = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+DIGIT_TOKENS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 TOKENS = DIGIT_TOKENS + WORD_TOKENS
 
 
@@ -26,15 +26,15 @@ def solve(input: str) -> int:
 
     for line in input.splitlines(keepends=False):
         digits = [token_to_digit(token) for token in get_tokens(line)]
-        line_value = 10*digits[0] + digits[-1]
+        line_value = 10 * digits[0] + digits[-1]
         total += line_value
 
     return total
 
 
-if __name__ == '__main__':
-    with open('./inputs/day1/input.txt', mode='r', encoding='utf-8') as file:
+if __name__ == "__main__":
+    with open("./inputs/day1/input.txt", mode="r", encoding="utf-8") as file:
         input = file.read()
-    
+
     answer = solve(input)
-    print(f'{answer = }')
+    print(f"{answer = }")
