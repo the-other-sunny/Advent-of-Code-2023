@@ -1,5 +1,4 @@
 import re
-from dataclasses import dataclass
 
 REGEX = re.compile(
     r"^Card\s+\d+:(?P<winning_numbers>(\s+\d+)*) \|(?P<obtained_numbers>(\s+\d+)*)$"
