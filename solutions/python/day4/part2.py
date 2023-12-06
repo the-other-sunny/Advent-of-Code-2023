@@ -46,7 +46,7 @@ def solve(input: str) -> int:
         for j in range(i + 1, i + 1 + matches_count):
             cards_data[j].copies += card_data.copies
 
-    answer = sum(line_data.copies for line_data in cards_data)
+    answer = sum(card_data.copies for card_data in cards_data)
 
     return answer
 
