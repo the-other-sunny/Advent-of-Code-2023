@@ -1,8 +1,15 @@
 import re
+from dataclasses import dataclass
 
 REGEX = re.compile(
     r"^Card\s+\d+:(?P<winning_numbers>(\s+\d+)*) \|(?P<obtained_numbers>(\s+\d+)*)$"
 )
+
+
+@dataclass
+class CardData:
+    matches_count: int = 0
+    copies: int = 1
 
 
 def parse_line(line: str) -> tuple[list[int], list[int]]:
@@ -26,19 +33,26 @@ def count_matches(winning_numbers: list[int], obtained_numbers: list[int]) -> in
 
 
 def solve(input: str) -> int:
-    answer = 0
-
-    for line in input.splitlines():
+    cards_data: list[CardData] = []
+    for i, line in enumerate(input.splitlines()):
         winning_numbers, obtained_numbers = parse_line(line)
         matches_count = count_matches(winning_numbers, obtained_numbers)
-        if matches_count != 0:
-            answer += 2 ** (matches_count - 1)
+        cards_data.append(CardData(matches_count, copies=1))
+
+    # update copies counts
+    for i, card_data in enumerate(cards_data):
+        matches_count = card_data.matches_count
+        # update next cards
+        for j in range(i + 1, i + 1 + matches_count):
+            cards_data[j].copies += card_data.copies
+
+    answer = sum(card_data.copies for card_data in cards_data)
 
     return answer
 
 
 if __name__ == "__main__":
-    with open("./inputs/day4/input.txt", mode="r", encoding="utf-8") as file:
+    with open("./inputs/day04.txt", mode="r", encoding="utf-8") as file:
         input = file.read()
 
     answer = solve(input)

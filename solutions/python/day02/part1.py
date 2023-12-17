@@ -47,27 +47,25 @@ def parse_game(line: str) -> Game:
     return Game(id=id, outcomes=outcomes)
 
 
-def minimal_bag(game: Game) -> Bag:
-    min_bag: Bag = {"red": 0, "green": 0, "blue": 0}
-    for color in COLORS:
-        min_bag[color] = max(  # type: ignore
-            (outcome[color] for outcome in game.outcomes), default=0  # type: ignore
-        )
-    return min_bag
+def outcome_is_possible(outcome: Outcome, bag_assumption: Bag) -> bool:
+    return all(outcome[color] <= bag_assumption[color] for color in COLORS)  # type: ignore
 
 
-def power(min_bag: Bag) -> int:
-    return min_bag["red"] * min_bag["green"] * min_bag["blue"]
+def game_is_possible(game: Game, bag_assumption: Bag) -> bool:
+    return all(
+        outcome_is_possible(outcome, bag_assumption) for outcome in game.outcomes
+    )
 
 
-def solve(input: str) -> int:
+def solve(input: str, bag_assumption: Bag) -> int:
     games = [parse_game(line) for line in input.splitlines()]
-    return sum(power(minimal_bag(game)) for game in games)
+    return sum(game.id for game in games if game_is_possible(game, bag_assumption))
 
 
 if __name__ == "__main__":
-    with open("./inputs/day2/input.txt", mode="r", encoding="utf-8") as file:
+    with open("./inputs/day02.txt", mode="r", encoding="utf-8") as file:
         input = file.read()
 
-    answer = solve(input)
+    bag_assumption: Bag = {"red": 12, "green": 13, "blue": 14}
+    answer = solve(input, bag_assumption)
     print(f"{answer = }")

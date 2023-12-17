@@ -1,20 +1,22 @@
 import re
+from collections import defaultdict
+from math import prod
 
 NumberLocation = tuple[int, int, int]
 Position = tuple[int, int]
 
 
-def is_symbol(c: str) -> bool:
-    return c != "."
+def is_gear(c: str) -> bool:
+    return c == "*"
 
 
-def is_symbol_at(line_index: int, col_index: int, lines: list[str]) -> bool:
+def is_gear_at(line_index: int, col_index: int, lines: list[str]) -> bool:
     lines_count, cols_count = len(lines), len(lines[0])
 
     return (
         0 <= line_index < lines_count
         and 0 <= col_index < cols_count
-        and is_symbol(lines[line_index][col_index])
+        and is_gear(lines[line_index][col_index])
     )
 
 
@@ -29,12 +31,6 @@ def get_neighboring_positions(number_location: NumberLocation) -> list[Position]
     return neighbors
 
 
-def is_part_number_at(number_location: NumberLocation, lines: list[str]) -> bool:
-    return any(
-        is_symbol_at(i, j, lines) for i, j in get_neighboring_positions(number_location)
-    )
-
-
 def get_numbers_locations(lines: list[str]) -> list[tuple[int, NumberLocation]]:
     locations = []
 
@@ -47,18 +43,30 @@ def get_numbers_locations(lines: list[str]) -> list[tuple[int, NumberLocation]]:
     return locations
 
 
+def get_gears_neighboring_numbers(lines: list[str]) -> defaultdict[Position, list[int]]:
+    gears_neighboring_numbers = defaultdict(list)
+
+    for number, location in get_numbers_locations(lines):
+        for i, j in get_neighboring_positions(location):
+            if is_gear_at(i, j, lines):
+                gear_position = (i, j)
+                gears_neighboring_numbers[gear_position].append(number)
+
+    return gears_neighboring_numbers
+
+
 def solve(input: str) -> int:
     lines = input.splitlines()
 
     return sum(
-        number
-        for (number, number_location) in get_numbers_locations(lines)
-        if is_part_number_at(number_location, lines)
+        prod(neighboring_numbers)
+        for _, neighboring_numbers in get_gears_neighboring_numbers(lines).items()
+        if len(neighboring_numbers) == 2
     )
 
 
 if __name__ == "__main__":
-    with open("./inputs/day3/input.txt", mode="r", encoding="utf-8") as file:
+    with open("./inputs/day03.txt", mode="r", encoding="utf-8") as file:
         input = file.read()
 
     answer = solve(input)

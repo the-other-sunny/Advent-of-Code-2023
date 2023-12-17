@@ -33,7 +33,7 @@ def solve(input: str) -> int:
 
 
 if __name__ == "__main__":
-    with open("./inputs/day1/input.txt", mode="r", encoding="utf-8") as file:
+    with open("./inputs/day01.txt", mode="r", encoding="utf-8") as file:
         input = file.read()
 
     answer = solve(input)
