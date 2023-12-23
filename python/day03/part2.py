@@ -35,7 +35,7 @@ def get_numbers_locations(lines: list[str]) -> list[tuple[int, NumberLocation]]:
     locations = []
 
     for line_index, line in enumerate(lines):
-        for regex_match in re.finditer("\d+", line):
+        for regex_match in re.finditer(r"\d+", line):
             number = int(regex_match[0])
             start, end = regex_match.span()
             locations.append((number, (line_index, start, end)))
