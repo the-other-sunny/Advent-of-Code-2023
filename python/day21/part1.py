@@ -57,7 +57,7 @@ def get_neighbors(pos: Position, grid: Grid) -> list[Position]:
 def solve(input: str, steps = 64) -> int:
     grid, starting_pos = parse(input)
 
-    positions = set([starting_pos])
+    positions = {starting_pos}
 
     for _ in range(steps):
         new_positions: set[Position] = set()

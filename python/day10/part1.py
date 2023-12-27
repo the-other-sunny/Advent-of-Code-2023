@@ -31,21 +31,21 @@ class Tile:
         self.type = tile_str
         match tile_str:
             case "|":
-                self._directions = set([Dirs.NORTH, Dirs.SOUTH])
+                self._directions = {Dirs.NORTH, Dirs.SOUTH}
             case "-":
-                self._directions = set([Dirs.EAST, Dirs.WEST])
+                self._directions = {Dirs.EAST, Dirs.WEST}
             case "L":
-                self._directions = set([Dirs.NORTH, Dirs.EAST])
+                self._directions = {Dirs.NORTH, Dirs.EAST}
             case "J":
-                self._directions = set([Dirs.NORTH, Dirs.WEST])
+                self._directions = {Dirs.NORTH, Dirs.WEST}
             case "7":
-                self._directions = set([Dirs.SOUTH, Dirs.WEST])
+                self._directions = {Dirs.SOUTH, Dirs.WEST}
             case "F":
-                self._directions = set([Dirs.SOUTH, Dirs.EAST])
+                self._directions = {Dirs.SOUTH, Dirs.EAST}
             case ".":
-                self._directions = set([])
+                self._directions = set()
             case "S":
-                self._directions = set([dir for dir in Dirs])
+                self._directions = {dir for dir in Dirs}
             case _:
                 raise RuntimeError
 
@@ -87,14 +87,14 @@ class Grid:
         )
 
     def get_loop_positions(self) -> set[Position]:
-        positions = set([self.starting_pos])
+        positions = {self.starting_pos}
 
         prev_pos = self.starting_pos
         curr_pos = self.get_neighbors(prev_pos).pop()
         while curr_pos != self.starting_pos:
             positions.add(curr_pos)
 
-            next_pos = (self.get_neighbors(curr_pos) - set([prev_pos])).pop()
+            next_pos = (self.get_neighbors(curr_pos) - {prev_pos}).pop()
             prev_pos, curr_pos = curr_pos, next_pos
 
         return positions
